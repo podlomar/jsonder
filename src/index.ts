@@ -41,7 +41,7 @@ interface JsonderOptions {
   };
 }
 
-const jsonder = (options: JsonderOptions): Jsonder => {
+const jsonder = (options?: JsonderOptions): Jsonder => {
   return {
     middleware() {
       const router = express.Router();
