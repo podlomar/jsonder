@@ -32,11 +32,13 @@ interface Jsonder {
   middleware: () => RequestHandler;
   endpoint: <Body, Data>(definition: EndpointDefinition<Body, Data>) => RequestHandler;
   sendSuccess: (res: Response, result: EndpointResult<unknown>) => void;
-  sendFail: (res: Response, errors: EndpointError[]) => void;
+  sendFail: (res: Response, error: EndpointError | EndpointError[]) => void;
 }
 
 interface JsonderOptions {
-  serverUrl: string;
+  generateUrls?: {
+    serverUrl: string;
+  };
 }
 
 const jsonder = (options: JsonderOptions): Jsonder => {
@@ -72,30 +74,38 @@ const jsonder = (options: JsonderOptions): Jsonder => {
     },
 
     sendSuccess: (res: Response, result: EndpointResult<unknown>) => {
+      const generateUrls = options?.generateUrls;
+      
       res.json({
         status: 'success',
         result: Array.isArray(result)
           ? result.map((item) => ({
             ...item,
-            url: `${options.serverUrl}${res.req.originalUrl}/${item.id}`,
+            url: generateUrls === undefined
+              ? undefined
+              : `${generateUrls.serverUrl}${res.req.originalUrl}/${item.id}`,
           }))
           : {
             ...result,
-            url: `${options.serverUrl}${res.req.originalUrl}`,
+            url: generateUrls === undefined
+              ? undefined
+              : `${generateUrls.serverUrl}${res.req.originalUrl}`,
           },
       });
     },
 
-    sendFail: (res: Response, errors: EndpointError[]) => {
-      const status = errors.length === 1
-        ? errors[0].status
-        : errors
-          .map((error) => Math.floor(error.status / 100))
-          .reduce((acc, cur) => (cur > acc ? cur : acc), 0) * 100;
+    sendFail: (res: Response, error: EndpointError | EndpointError[]) => {
+      const status = !Array.isArray(error)
+        ? error.status
+        : error.length === 1
+          ? error[0].status
+          : error
+            .map((e) => Math.floor(e.status / 100))
+            .reduce((acc, cur) => (cur > acc ? cur : acc), 0) * 100;
       
       res.status(status).json({
         status: 'fail',
-        errors,
+        errors: Array.isArray(error) ? error : [error],
       });
     }
   }
