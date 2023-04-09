@@ -23,8 +23,8 @@ interface EndpointDefinition<Body, Data> {
   handler: (
     req: Request, res: Response,
   ) => (
-    | Result<EndpointResult<Data>, EndpointError[]>
-    | Promise<Result<EndpointResult<Data>, EndpointError[]>>
+    | Result<EndpointResult<Data>, EndpointError | EndpointError[]>
+    | Promise<Result<EndpointResult<Data>, EndpointError | EndpointError[]>>
   );
 }
 
