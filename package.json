@@ -1,6 +1,6 @@
 {
   "name": "jsonder",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Create a JSON API with reasonable looking responses",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
