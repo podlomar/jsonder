@@ -28,7 +28,7 @@ interface EndpointDefinition<Body, Data> {
   );
 }
 
-interface Jsonder {
+export interface Jsonder {
   middleware: () => RequestHandler;
   endpoint: <Body, Data>(definition: EndpointDefinition<Body, Data>) => RequestHandler;
   sendSuccess: (res: Response, result: EndpointResult<unknown>) => void;
