@@ -21,8 +21,7 @@
   },
   "homepage": "https://github.com/podlomar/jsonder#readme",
   "peerDependencies": {
-    "express": "4.x",
-    "monadix": "0.x"
+    "express": "4.x"
   },
   "optionalDependencies": {
     "zod": "3.x"
@@ -37,7 +36,8 @@
     "zod": "^3.21.4"
   },
   "dependencies": {
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "monadix": "^0.2.0"
   },
   "files": [
     "dist"
